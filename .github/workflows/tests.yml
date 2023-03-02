@@ -3,11 +3,11 @@ name: Tests
 on:
   push:
     branches:
-      - "master"
+      - "main"
       - "stable"
   pull_request:
     branches:
-      - "master"
+      - "main"
       - "stable"
 
 jobs:
