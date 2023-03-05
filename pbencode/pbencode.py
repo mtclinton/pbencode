@@ -9,11 +9,11 @@ def encode(input_value: bytes | int | str | list | dict) -> bytes:
     """Encode input value using bencode specification"""
 
     if isinstance(input_value, bytes):
-        return str(len(input_value)).encode("UTF-8") + b":" + input_value
+        return str(len(input_value)).encode() + b":" + input_value
     if isinstance(input_value, int):
-        return b"i" + str(input_value).encode("UTF-8") + b"e"
+        return b"i" + str(input_value).encode() + b"e"
     if isinstance(input_value, str):
-        return encode(input_value.encode("UTF-8"))
+        return encode(input_value.encode())
     if isinstance(input_value, list):
         return b"l" + b"".join(map(encode, input_value)) + b"e"
     if isinstance(input_value, dict):
@@ -29,7 +29,7 @@ def decode(input_value: bytes | str) -> bytes | int | str | list | dict:
     """Decode input value using bencode specification"""
 
     if isinstance(input_value, str):
-        input_value = input_value.encode("UTF-8")
+        input_value = input_value.encode()
     if input_value.startswith(b"i"):
         first_int = re.match(b"i(-?\\d+)e", input_value)
         if first_int:
@@ -51,7 +51,7 @@ def decode(input_value: bytes | str) -> bytes | int | str | list | dict:
             res.append(val)
             input_value = input_value[len(encode(val)) :]
         return dict(zip(res[::2], res[1::2]))
-    if any(input_value.startswith(str(i).encode("UTF-8")) for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]):
+    if any(input_value.startswith(str(i).encode()) for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]):
         val_length = re.match(b"(\\d+):", input_value)
         if val_length:
             length = int(val_length.group(1))
